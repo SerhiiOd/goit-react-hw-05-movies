@@ -44,9 +44,10 @@ export default function MovieDetails() {
   }, [movieId]);
 
   const location = useLocation();
-  const backLink = location.state?.from ?? '/';
+  // const backLink = location.state?.from ?? '/';
   const navigate = useNavigate();
-  const onGoBack = () => navigate(backLink);
+  // const onGoBack = () => navigate(backLink);
+  const onGoBack = () => navigate(-2);
 
   const { poster_path, title, release_date, vote_average, overview, genres } =
     movieDetails;
