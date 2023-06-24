@@ -1,16 +1,15 @@
+import { useState, useEffect, Suspense } from 'react';
+import { useParams, useLocation, useNavigate, Outlet } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import { Loader } from 'components/Loader/Loader';
+import { MovieCard } from 'components/MovieCard/MovieCard';
+import { fetchDetailsMovies } from 'services/moviesAPI';
 import {
   BtnRevers,
   TitleInform,
   LinkBox,
   LinkInform,
 } from './MovieDetails.styled';
-import { useState, useEffect, Suspense } from 'react';
-import { useParams } from 'react-router-dom';
-import { toast } from 'react-hot-toast';
-import { Loader } from 'components/Loader/Loader';
-import { MovieCard } from 'components/MovieCard/MovieCard';
-import { fetchDetailsMovies } from 'services/moviesAPI';
-import { Outlet, useNavigate } from 'react-router-dom';
 
 export default function MovieDetails() {
   const [movieDetails, setMovieDetails] = useState({
@@ -24,6 +23,9 @@ export default function MovieDetails() {
   });
   const [loader, setLoader] = useState(true);
   const { movieId } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [previousRoute, setPreviousRoute] = useState('/');
 
   useEffect(() => {
     async function fetchMovieDetails() {
@@ -40,14 +42,17 @@ export default function MovieDetails() {
         setLoader(false);
       }
     }
-    fetchMovieDetails();
-  }, [movieId]);
 
-  // const location = useLocation();
-  // const backLink = location.state?.from ?? '/';
-  const navigate = useNavigate();
-  // const onGoBack = () => navigate(backLink);
-  const onGoBack = () => navigate(-2);
+    fetchMovieDetails();
+
+    if (location.state && location.state.from) {
+      setPreviousRoute(location.state.from);
+    }
+  }, [movieId, location.state]);
+
+  const onGoBack = () => {
+    navigate(previousRoute);
+  };
 
   const { poster_path, title, release_date, vote_average, overview, genres } =
     movieDetails;
@@ -63,7 +68,7 @@ export default function MovieDetails() {
     <>
       <main>
         <BtnRevers type="button" onClick={onGoBack}>
-          Back to
+          Назад
         </BtnRevers>
         {movieDetails && (
           <MovieCard
