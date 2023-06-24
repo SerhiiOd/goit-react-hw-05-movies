@@ -5,7 +5,7 @@ import {
   LinkInform,
 } from './MovieDetails.styled';
 import { useState, useEffect, Suspense } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { Loader } from 'components/Loader/Loader';
 import { MovieCard } from 'components/MovieCard/MovieCard';
@@ -43,7 +43,7 @@ export default function MovieDetails() {
     fetchMovieDetails();
   }, [movieId]);
 
-  const location = useLocation();
+  // const location = useLocation();
   // const backLink = location.state?.from ?? '/';
   const navigate = useNavigate();
   // const onGoBack = () => navigate(backLink);
